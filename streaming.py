@@ -1,15 +1,20 @@
+#This is a simple example of the Tweepy streaming functinallity. It will listen to
+#all tweets containing "android" and will keep track of the hashtags used in the tweets.
+
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 import oauthHandler
 import json
 
-tweetDict = dict()
+tweetDict = dict() 
 parsedTweets = 0
 
+#Handeling tweets, updating dict, and writing a log
 def parseTweet(tweet):
 	global tweetDict
 	global parsedTweets
+	#Look for all tags and update our tweetDict
 	for tag in tweet.hashtags:
 		t = tag["text"]
 		if(tweetDict.has_key(t)):
@@ -17,6 +22,7 @@ def parseTweet(tweet):
 		else:
 			tweetDict[t] = 1
 	parsedTweets += 1
+	#Every 10th tweet we will output the most popular tag and write the info to the log
 	if(parsedTweets > 10):
 		parsedTweets = 0
 		maxi = 0
@@ -34,6 +40,7 @@ def parseTweet(tweet):
 		print output 
 			
 
+#Tweet class with all the information we need for this program (Hashtags and the actual tweet text)
 class Tweet:
         text = str()
 	hashtags = []
@@ -42,6 +49,7 @@ class Tweet:
 		self.text = json["text"] 
 		self.hashtags = json["entities"]["hashtags"]
 
+#Basic listener which parses the json, creates a tweet, and sends it to parseTweet
 class TweetListener(StreamListener):
 	def on_data(self, data):
 		jsonData = json.loads(data)
@@ -58,6 +66,6 @@ if __name__ == '__main__':
 	listener = TweetListener()
 	auth = oauthHandler.getAuth()
 	stream = Stream(auth, listener)	
-	stream.filter(track=['android'])
+	stream.filter(track=['android']) #This will start the stream and make callbacks to the listener for all tweets containing "android"
 
 
