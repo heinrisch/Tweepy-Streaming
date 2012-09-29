@@ -5,7 +5,8 @@ A simple example using the Tweepy streaming functionallity. This python applicat
 
 Getting started:
 * 1. Create a twitter app on twitter.com/dev
-* 2. Edit oauthHandler.py with your information
-* 3. Run "python streaming.py"
+* 2. Install tweepy
+* 3. Edit oauthHandler.py with your information
+* 4. Run "python streaming.py"
 
 Enjoy! :)
